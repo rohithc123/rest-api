@@ -1,10 +1,10 @@
-package client
+package main
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 var mySigningKey = []byte("mysecretscript")
