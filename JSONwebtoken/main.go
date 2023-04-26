@@ -2,12 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// var mySigningKey = os.Get("MY_JWT_TOKEN")
+// don't do like this,since it is being uploaded in a public repo
 var mySigningKey = []byte("mysecretscript")
+
+func homePage(w http.ResponseWriter, r *http.Request) {
+	validToken, err := GenerateJWT()
+
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+
+	fmt.Fprintf(w, validToken)
+}
 
 func GenerateJWT() (string, error) {
 
@@ -28,15 +42,14 @@ func GenerateJWT() (string, error) {
 	return tokenString, nil
 }
 
+func handleRequest() {
+	http.HandleFunc("/", homePage)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
 func main() {
 	fmt.Println("My simple client")
 
-	tokenString, err := GenerateJWT()
-
-	if err != nil {
-		fmt.Println("Error generating token string")
-	}
-
-	fmt.Println(tokenString)
-
+	handleRequest()
 }
